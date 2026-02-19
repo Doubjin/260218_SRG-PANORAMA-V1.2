@@ -23,6 +23,13 @@ class LufsProcessor extends AudioWorkletProcessor {
         // Integrated State
         this.integratedSum = 0;
         this.integratedCount = 0;
+
+        this.port.onmessage = (e) => {
+            if (e.data.type === 'reset') {
+                this.integratedSum = 0;
+                this.integratedCount = 0;
+            }
+        };
     }
 
     process(inputs, outputs, parameters) {

@@ -13,7 +13,9 @@ class AudioApp {
         this.isPlaying = false;
         this.startTime = 0;
         this.pauseTime = 0;
-        this.isLooping = false;
+        this.isPlaying = false;
+        this.startTime = 0;
+        this.pauseTime = 0;
 
         // UI Elements
         this.dropZone = document.getElementById('drop-zone');
@@ -22,7 +24,9 @@ class AudioApp {
         this.playerControls = document.getElementById('player-controls');
         this.btnPlay = document.getElementById('btn-play');
         this.btnStop = document.getElementById('btn-stop');
-        this.btnLoop = document.getElementById('btn-loop');
+        this.btnPlay = document.getElementById('btn-play');
+        this.btnStop = document.getElementById('btn-stop');
+        this.btnReset = document.getElementById('btn-reset');
 
         this.timeCurrent = document.getElementById('time-current');
         this.timeTotal = document.getElementById('time-total');
@@ -72,11 +76,9 @@ class AudioApp {
         // Transport
         this.btnPlay.addEventListener('click', () => this.togglePlay());
         this.btnStop.addEventListener('click', () => this.stop());
-        this.btnLoop.addEventListener('click', () => {
-            this.isLooping = !this.isLooping;
-            this.btnLoop.classList.toggle('active');
-            if (this.sourceNode) this.sourceNode.loop = this.isLooping;
-        });
+        this.btnPlay.addEventListener('click', () => this.togglePlay());
+        this.btnStop.addEventListener('click', () => this.stop());
+        this.btnReset.addEventListener('click', () => this.resetMeters());
 
         // Waveform Seeking
         // Click to seek
@@ -185,7 +187,9 @@ class AudioApp {
 
         this.sourceNode = this.ctx.createBufferSource();
         this.sourceNode.buffer = this.audioBuffer;
-        this.sourceNode.loop = this.isLooping;
+        this.sourceNode = this.ctx.createBufferSource();
+        this.sourceNode.buffer = this.audioBuffer;
+        this.sourceNode.loop = false;
 
         this.sourceNode.connect(this.gainNode);
         this.sourceNode.connect(this.workletNode);
@@ -201,7 +205,7 @@ class AudioApp {
         this.animateFrame = requestAnimationFrame(() => this.updateTime());
 
         this.sourceNode.onended = () => {
-            if (this.isPlaying && !this.isLooping && (this.ctx.currentTime - this.startTime >= this.audioBuffer.duration)) {
+            if (this.isPlaying && (this.ctx.currentTime - this.startTime >= this.audioBuffer.duration)) {
                 this.stop(false);
             }
         };
@@ -258,9 +262,7 @@ class AudioApp {
         const now = this.ctx.currentTime;
         let pTime = now - this.startTime;
 
-        if (this.isLooping && pTime > this.audioBuffer.duration) {
-            pTime = pTime % this.audioBuffer.duration;
-        } else if (pTime > this.audioBuffer.duration) {
+        if (pTime > this.audioBuffer.duration) {
             pTime = this.audioBuffer.duration;
         }
 
@@ -299,6 +301,25 @@ class AudioApp {
         const m = Math.floor(seconds / 60);
         const s = Math.floor(seconds % 60);
         return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+
+    resetMeters() {
+        // Reset Audio Worklet (Integrated LUFS)
+        if (this.workletNode) {
+            this.workletNode.port.postMessage({ type: 'reset' });
+        }
+
+        // Reset Visualizer History (Radar)
+        if (this.visualizer) {
+            this.visualizer.history = [];
+            this.visualizer.drawRadar();
+        }
+
+        // Reset UI Text
+        this.elIntegrated.textContent = '-oo LUFS';
+        this.elLra.textContent = '0.0 LU';
+        // (Optional) Reset True Peak if desired, though normally TP is "Max since reset"
+        this.elTruepeak.textContent = '-oo dBTP';
     }
 }
 
