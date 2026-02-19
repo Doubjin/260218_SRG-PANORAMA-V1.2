@@ -281,19 +281,18 @@ h3 {
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
     body {
-        height: 100vh;
+        height: 100dvh;
+        /* Use dynamic viewport height */
         overflow: hidden;
-        /* No scroll on body */
         padding: 0;
     }
 
     .app-container {
-        height: 100vh;
+        height: 100dvh;
         width: 100%;
         max-width: 100%;
         padding: 10px;
         overflow: hidden;
-        /* No scroll in container */
         border: none;
         border-radius: 0;
         display: flex;
@@ -303,18 +302,15 @@ h3 {
 
     .header {
         flex: 0 0 auto;
-        /* Fixed height header */
         flex-direction: row;
-        /* Keep logo and led side-by-side if they fit */
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
         gap: 10px;
     }
 
     .logo {
         font-size: 1.2rem;
-        /* Smaller logo */
     }
 
     .logo .model {
@@ -323,23 +319,20 @@ h3 {
 
     .meter-display {
         flex: 1 1 auto;
-        /* Grow/Shrink to fill available space */
         flex-direction: column;
-        gap: 10px;
+        gap: 5px;
         overflow: hidden;
-        /* Prevent spill */
         position: relative;
+        justify-content: space-between;
     }
 
     /* Radar / Visualizer at TOP */
     .visualizer-container {
         position: relative;
         width: 100%;
-        flex: 0 0 40%;
-        /* Take roughly 40% of the middle area */
-        /* Make sure it doesn't get too small or too big */
-        min-height: 150px;
-        margin-bottom: 0;
+        flex: 1 1 auto;
+        min-height: 0;
+        margin-bottom: 5px;
     }
 
     /* Stats Panel below Radar */
@@ -347,81 +340,78 @@ h3 {
         width: 100%;
         margin-left: 0;
         gap: 5px;
-        flex: 1 1 auto;
-        /* Take remaining space */
+        flex: 0 0 auto;
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        /* 2 Columns */
-        align-content: start;
-        /* Pack to top */
-        overflow-y: auto;
-        /* Allow scroll only inside stats if REALLY needed, but aim for no scroll */
+        grid-template-columns: 1fr 1.2fr;
+        align-content: end;
+        padding-bottom: 5px;
     }
 
     .stat-row {
-        flex-direction: column;
+        flex-direction: row;
+        justify-content: space-between;
         align-items: center;
-        /* Center align for grid cells */
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        padding-bottom: 2px;
+        padding: 4px 0;
     }
 
     .stat-label {
-        font-size: 0.6rem;
+        font-size: 0.7rem;
+        text-align: left;
     }
 
     .stat-value {
         font-size: 1.2rem;
+        text-align: right;
     }
 
     .target-selector {
         grid-column: 1 / -1;
-        /* Span full width */
         padding-top: 5px;
         border-top: 1px solid rgba(0, 0, 0, 0.1);
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         gap: 10px;
     }
 
     .target-selector h3 {
-        font-size: 0.7rem;
-        margin: 0;
-        display: inline-block;
-        margin-right: 5px;
+        display: none;
     }
 
     .radio-group label {
-        font-size: 0.7rem;
+        font-size: 0.8rem;
     }
 
     /* Footer Controls */
     .controls-panel {
         flex: 0 0 auto;
-        /* Fixed height footer */
         flex-direction: column;
         align-items: stretch;
         gap: 5px;
-        margin-top: 5px;
+        margin-top: 0;
         width: 100%;
     }
 
+    /* File Banner Style */
     .drop-zone {
         display: flex;
         width: 100%;
-        height: 30px;
-        border-radius: 5px;
-        padding: 0;
+        height: 36px;
+        border-radius: 18px;
+        padding: 0 15px;
         justify-content: center;
         align-items: center;
-        background: rgba(255, 255, 255, 0.3);
-        border: 1px dashed #666;
+        background: rgba(255, 255, 255, 0.4);
+        border: 1px dashed #333;
+        margin-bottom: 5px;
     }
 
     .drop-text {
-        font-size: 0.6rem;
-        padding: 5px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #333;
+        padding: 0;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -429,21 +419,30 @@ h3 {
 
     .player-controls {
         width: 100%;
-        margin-bottom: 5px;
+        margin-bottom: 0;
         display: flex;
-        flex-direction: column;
-        gap: 5px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
     }
 
     .transport-buttons {
         display: flex;
-        justify-content: center;
-        gap: 30px;
-        margin-bottom: 2px;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 0;
+        flex: 0 0 auto;
     }
 
     .icon-btn {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
+    }
+
+    .time-display {
+        font-size: 0.9rem;
+        font-variant-numeric: tabular-nums;
+        margin-left: auto;
     }
 
     .timeline-container {
@@ -452,39 +451,23 @@ h3 {
         display: flex;
         flex-direction: column;
         width: 100%;
+        flex: 1 1 100%;
     }
 
     .waveform-wrapper {
         width: 100%;
-        height: 60px;
-        /* Fixed height for waveform */
-        background: rgba(255, 255, 255, 0.2);
+        height: 40px;
+        background: transparent;
         border-radius: 4px;
-        margin: 2px 0;
+        margin-top: 5px;
+        border-bottom: 1px solid #333;
     }
 
-    .time-display {
-        font-size: 0.7rem;
-        align-self: flex-end;
-        /* Put time on right or sides */
+    ::-webkit-scrollbar {
+        display: none;
     }
-
-    /* Modify timeline to put times on sides of waveform if possible, or just keep above */
 
     .monitor-control {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .monitor-control label {
-        font-size: 0.7rem;
-        white-space: nowrap;
-    }
-
-    .monitor-control input {
-        flex: 1;
+        display: none;
     }
 }
