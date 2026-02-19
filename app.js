@@ -171,8 +171,9 @@ class AudioApp {
             // Draw Waveform
             this.waveform.loadAudio(this.audioBuffer);
 
-            // Reset state
+            // Reset state then Play immediately
             this.stop();
+            this.play();
         } catch (err) {
             console.error(err);
             alert('Error decoding audio file.');
