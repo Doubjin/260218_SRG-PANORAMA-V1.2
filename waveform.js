@@ -26,7 +26,11 @@ export class WaveformDisplay {
         this.canvas.height = this.height * dpr;
         this.ctx.scale(dpr, dpr);
 
-        if (this.peaks) this.drawStaticWaveform();
+        // Re-draw if data exists. 
+        // We might not know 'currentTime' here easily without storing it.
+        // For now, redraw at 0 or simply don't draw playhead if strictly "static".
+        // But drawState clears canvas, so we must draw something.
+        if (this.peaks) this.drawState(0); 
     }
 
     // Pre-calculate peaks for the entire file to avoid re-processing every frame
